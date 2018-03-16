@@ -1,0 +1,129 @@
+<!--PSYCHIC GAME
+    Computer picks random letter
+        This will have to most likely use Math.Random, which 
+         will pick an index of a letter array
+    User enters a letter
+        An event is thrown to run a function
+        The key is recorded
+        The key is validated through another method
+        Based on what is returned for from validation,
+         a statsUpdater method increments values of the game, 
+         unless the game is at an end
+    Program checks validity of User Input
+-->
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Psychic Game</title>
+</head>
+
+<body>
+
+    <script>
+        var validLetters = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm'];
+        var wins = 0;
+        var losses = 0;
+        var guessesLeft = 10;
+        var guessesSoFar = " ";
+
+        //Picks a random letter for the computer, returns the letter
+        function pickRandomLetter() {
+            var index = Math.floor((Math.random() * 25) + 0);
+            var letter = validLetters[index];
+            return letter;
+        }
+
+        //Validates user input and returns a boolean indicating if it is valid
+        function validateInput(letter) {
+            var isValid = false;
+            if (validLetters.indexOf(letter) != -1) {
+                console.log("validattion works" + true);
+                return true;
+            }
+            else {
+                console.log("validattion works" + false);
+                return isValid;
+            }
+        }
+
+        //Compares two letters and increments stats
+        function compareLetters(letter1, letter2) {
+            if (letter1 === letter2) {
+                wins++;
+                guessesLeft--;
+                if(guessesLeft == -1)
+                {
+                    reset();
+                }
+            }
+            else {
+                losses++;
+                guessesLeft--;
+                if(guessesLeft == -1)
+                {
+                    reset();
+                }
+            }
+        }
+
+        function reset() {
+            wins = 0;
+            losses = 0;
+            guessesLeft = 10;
+            guessesSoFar = " ";
+        }
+
+        document.onkeyup = function (event) {
+            //Grabbing all the UI elements
+            var winsText = document.getElementById("Wins");
+            var lossesText = document.getElementById("Losses");
+            var guessesLeftText = document.getElementById("GuessesLeft");
+            var guessesSoFarText = document.getElementById("GuessesSoFar");
+
+            //Grabbing and validating the letters
+            var userGuess = event.key;
+            console.log(userGuess);
+            var computerGuess = pickRandomLetter();
+            console.log(computerGuess);
+            var isValidInput = validateInput(userGuess);
+            console.log("asdf" + isValidInput);
+
+            //Manipulating Stats based on Input
+            if (isValidInput == true) {
+                guessesSoFar = guessesSoFar + userGuess + " ";
+                compareLetters(userGuess, computerGuess);
+
+                winsText.textContent = wins;
+                lossesText.textContent = losses;
+                guessesLeftText.textContent = guessesLeft;
+                guessesSoFarText.textContent = guessesSoFar;
+            }
+            else {
+                alert("the input was crap!");
+            }
+        };
+
+
+    </script>
+
+    <h1>Guess My Letter!</h1>
+
+    <p>Wins:
+        <span id="Wins">0</span>
+    </p>
+    <p>Losses:
+        <span id="Losses">0</span>
+    </p>
+    <p>Guesses Left:
+        <spam id="GuessesLeft">10</spam>
+    </p>
+    <p>Guesses So Far:
+        <span id="GuessesSoFar">None</span>
+    </p>
+
+
+</body>
+
+</html>
